@@ -1,24 +1,72 @@
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Scanner;
 
-public class Game {
+public class Game
+{
     private String answer;
-    ArrayList<String> dictionary;
+    private Scanner scanner;
+    private String userName;
+    private final ArrayList<String> dictionary;
 
-    private void importDictionary()
+    public Game() throws FileNotFoundException {
+        scanner = new Scanner(System.in);
+        dictionary = new ArrayList<>();
+        importDictionary();
+    }
+
+    public void menu()
     {
-        try
+        String userChoice = "";
+        System.out.println("Welcome to Wordle!");
+        System.out.println("Can you guess the 5-letter word?");
+        while (!userChoice.equals("q"))
         {
-            FileReader filereader = new FileReader("src\\words.txt");
-            BufferedReader reader = new BufferedReader(new FileReader(filereader));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.out.println("------------ Main Menu ----------");
+            System.out.println("(N)ew Game");
+            System.out.println("(H)ighest Score");
+            System.out.println("(Q)uit");
+            System.out.print("Enter choice: ");
+            userChoice = scanner.nextLine();
+            processChoice(userChoice);
+        }
+    }
+    public void processChoice(String choice)
+    {
+        choice = choice.toLowerCase();
+        if(choice.equals("n"))
+        {
+            startGame();
+        }
+        else if(choice.equals("h"))
+        {
+            //get high score
+        }
+        else
+        {
+            System.out.println("INVALID CHOICE");
+        }
+    }
+
+    public void startGame()
+    {
+        Board board = new Board();
+        board.printGrid();
+    }
+
+    private void importDictionary() throws FileNotFoundException
+    {
+        File file = new File("src\\words.txt");
+        Scanner sc = new Scanner(file);
+        while (sc.hasNextLine())
+        {
+            dictionary.add(sc.nextLine());
         }
 
+
     }
+
 
 }

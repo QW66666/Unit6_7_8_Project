@@ -1,5 +1,5 @@
 public class Board {
-    private final String[][] board;
+    private String[][] board;
 
     public Board()
     {
@@ -8,7 +8,7 @@ public class Board {
         {
             for(int col = 0; col < board[0].length; col++)
             {
-                board[row][col] = "_";
+                board[row][col] = "  _  ";
             }
         }
     }
@@ -19,10 +19,15 @@ public class Board {
         {
             for(String letter : arr)
             {
-                System.out.print(letter + " ");
+                System.out.print(letter);
             }
             System.out.println();
         }
+    }
+
+    public void changeBoard(int row, int col, String input)
+    {
+        board[row][col] = input;
     }
 
 }

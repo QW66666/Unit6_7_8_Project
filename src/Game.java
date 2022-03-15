@@ -1,5 +1,6 @@
 import java.io.*;
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Scanner;
@@ -10,11 +11,13 @@ public class Game
     private Scanner scanner;
     private String userName;
     private final ArrayList<String> dictionary;
+    private int numTries;
 
     public Game() throws FileNotFoundException {
         scanner = new Scanner(System.in);
         dictionary = new ArrayList<>();
         importDictionary();
+        numTries = 6;
     }
 
     public void menu()
@@ -53,7 +56,84 @@ public class Game
     public void startGame()
     {
         Board board = new Board();
-        board.printGrid();
+        //answer = dictionary.get(((int)(Math.random()*(dictionary.size()-1))+1));
+        answer = "bells";
+        int row = 0;
+        while(numTries > 0)
+        {
+            board.printGrid();
+            System.out.println(answer);
+            System.out.print("Enter Your Guess: ");
+            String userGuess = scanner.nextLine();
+            if(userGuess.length() != 5)
+            {
+                System.out.println("NOT VALID WORD LENGTH");
+            }
+            else
+            {
+                for(int i = 0; i < 5; i++)
+                {
+                    board.changeBoard(row, i, checkWord(userGuess).get(i));
+                }
+                if(userGuess.equals(answer))
+                {
+                    System.out.println("YOU GUESSED THE WORD");
+                    break;
+                }
+                row++;
+                numTries++;
+            }
+        }
+    }
+    private ArrayList<String> checkWord(String input)
+    {
+       /* String[] answerAsList = answer.split("");
+        String[] word = input.split("");
+        ArrayList<String> result = new ArrayList<>();
+        for(int i = 0; i < 5; i++)
+        {
+            for(int j = 0; j < 5; j++)
+            {
+                if(word[i].equalsIgnoreCase(answerAsList[j]))
+                {
+                    if(i != j)
+                    {
+                        result.add("?");
+                    }
+                    else
+                    {
+                        result.add(word[i]);
+                    }
+                }
+                else
+                {
+                    result.add("X");
+                }
+            }
+            System.out.println(result.get(i));
+        }
+        return result;*/
+
+        ArrayList<String> result = new ArrayList<>();
+        for(int i = 0; i < answer.length(); i++)
+        {
+            if(answer.contains(input.substring(i, i+1)))
+            {
+                if(answer.substring(i, i+1).equals(input.substring(i, i+1)))
+                {
+                    result.add("  " + input.substring(i, i+1) + "  ");
+                }
+                else
+                {
+                    result.add(" ?" + input.substring(i, i+1) + "? ");
+                }
+            }
+            else
+            {
+                result.add("  " + "X" + "  ");
+            }
+        }
+        return result;
     }
 
     private void importDictionary() throws FileNotFoundException

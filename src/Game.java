@@ -14,13 +14,16 @@ public class Game
     private int highScore;
     private int numTries;
     private int currScore;
-    private int highScore;
+    public static final String RED = "\u001B[31m";
+    public static final String YELLOW = "\u001B[33m";
+    public static final String GREEN = "\u001B[32m";
+    public static final String RESET = "\u001B[0m";
+
 
     public Game() throws FileNotFoundException {
         scanner = new Scanner(System.in);
         dictionary = new ArrayList<>();
         importDictionary();
-        numTries = 6;
         currScore = 0;
         highScore = 0;
     }
@@ -52,7 +55,7 @@ public class Game
         {
             System.out.println("High Score: " + highScore);
         }
-        else
+        else if(!choice.equals("q"))
         {
             System.out.println("INVALID CHOICE");
         }
@@ -61,12 +64,15 @@ public class Game
     public void startGame()
     {
         Board board = new Board();
-        answer = dictionary.get(((int)(Math.random()*(dictionary.size()-1))+1));
-        //answer = "bells";
-        int row = 0;
+        //answer = dictionary.get(((int)(Math.random()*(dictionary.size()-1))+1));
+        answer = "bells"; //TESTING
+        int row = -1;
+        numTries = 6;
+        int round = 1;
         while(numTries > 0)
         {
             board.printGrid();
+            System.out.println(answer); //TESTING
             System.out.print("Enter Your Guess: ");
             String userGuess = scanner.nextLine();
             if(userGuess.length() != 5)
@@ -79,18 +85,41 @@ public class Game
             }
             else
             {
+                numTries--;
+                row++;
                 for(int i = 0; i < 5; i++)
                 {
                     board.changeBoard(row, i, checkWord(userGuess).get(i));
                 }
-                if(userGuess.equals(answer))
+                if(userGuess.equalsIgnoreCase(answer))
                 {
+                    for(int i = 0; i < 5; i++)
+                    {
+                        board.changeBoard(row, i, checkWord(userGuess).get(i));
+                    }
+                    board.printGrid();
                     System.out.println("YOU GUESSED THE WORD");
                     calculateScore();
-                    break;
+                    System.out.println("Score: " + currScore);
+                    if(numTries > 0)
+                    {
+                        round++;
+                        System.out.println("\nWORD " + round);
+                        board.resetBoard();
+                        row = -1;
+                        numTries = 6;
+                        answer = dictionary.get(((int)(Math.random()*(dictionary.size()-1))+1));
+                    }
+
                 }
-                row++;
-                numTries--;
+            }
+            if(numTries == 0)
+            {
+                if (currScore > highScore)
+                {
+                    highScore = currScore;
+                }
+                currScore = 0;
             }
         }
     }
@@ -100,20 +129,22 @@ public class Game
         ArrayList<String> result = new ArrayList<>();
         for(int i = 0; i < answer.length(); i++)
         {
-            if(answer.contains(input.substring(i, i+1)))
+            String inputLetter = input.substring(i, i+1).toUpperCase();
+            String answerLetter = answer.substring(i, i+1).toUpperCase();
+            if(answerLetter.contains(inputLetter))
             {
-                if(answer.substring(i, i+1).equals(input.substring(i, i+1)))
+                if(answerLetter.equals(inputLetter))
                 {
-                    result.add("  " + input.substring(i, i+1) + "  ");
+                    result.add("  " + GREEN + inputLetter + "  " + RESET);
                 }
                 else
                 {
-                    result.add(" ?" + input.substring(i, i+1) + "? ");
+                    result.add("  " + YELLOW + inputLetter + "  " + RESET);
                 }
             }
             else
             {
-                result.add("  " + "X" + "  ");
+                result.add("  " + RED + inputLetter + "  " + RESET);
             }
         }
         return result;
@@ -133,7 +164,7 @@ public class Game
 
     private void calculateScore()
     {
-        currScore += 10*numTries+1;
+        currScore += 10*(numTries+1);
     }
 
     private void importDictionary() throws FileNotFoundException

@@ -25,6 +25,16 @@ public class Board {
         }
     }
 
+    public void resetBoard()
+    {
+        for(int row = 0; row < board.length; row++)
+        {
+            for(int col = 0; col < board[0].length; col++)
+            {
+                board[row][col] = "  _  ";
+            }
+        }
+    }
     public void changeBoard(int row, int col, String input)
     {
         board[row][col] = input;

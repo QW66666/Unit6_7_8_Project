@@ -13,12 +13,16 @@ public class Game
     private final ArrayList<String> dictionary;
     private int highScore;
     private int numTries;
+    private int currScore;
+    private int highScore;
 
     public Game() throws FileNotFoundException {
         scanner = new Scanner(System.in);
         dictionary = new ArrayList<>();
         importDictionary();
         numTries = 6;
+        currScore = 0;
+        highScore = 0;
     }
 
     public void menu()
@@ -46,7 +50,7 @@ public class Game
         }
         else if(choice.equals("h"))
         {
-            //get high score
+            System.out.println("High Score: " + highScore);
         }
         else
         {
@@ -57,18 +61,21 @@ public class Game
     public void startGame()
     {
         Board board = new Board();
-        //answer = dictionary.get(((int)(Math.random()*(dictionary.size()-1))+1));
-        answer = "bells";
+        answer = dictionary.get(((int)(Math.random()*(dictionary.size()-1))+1));
+        //answer = "bells";
         int row = 0;
         while(numTries > 0)
         {
             board.printGrid();
-            System.out.println(answer);
             System.out.print("Enter Your Guess: ");
             String userGuess = scanner.nextLine();
             if(userGuess.length() != 5)
             {
                 System.out.println("NOT VALID WORD LENGTH");
+            }
+            else if(!validWord(userGuess))
+            {
+                System.out.println("NOT A WORD IN LIST");
             }
             else
             {
@@ -79,10 +86,11 @@ public class Game
                 if(userGuess.equals(answer))
                 {
                     System.out.println("YOU GUESSED THE WORD");
+                    calculateScore();
                     break;
                 }
                 row++;
-                numTries++;
+                numTries--;
             }
         }
     }
@@ -109,6 +117,23 @@ public class Game
             }
         }
         return result;
+    }
+
+    private boolean validWord(String input)
+    {
+        for(String str : dictionary)
+        {
+            if(input.equalsIgnoreCase(str))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void calculateScore()
+    {
+        currScore += 10*numTries+1;
     }
 
     private void importDictionary() throws FileNotFoundException

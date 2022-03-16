@@ -11,6 +11,7 @@ public class Game
     private Scanner scanner;
     private String userName;
     private final ArrayList<String> dictionary;
+    private int highScore;
     private int numTries;
 
     public Game() throws FileNotFoundException {
@@ -85,35 +86,9 @@ public class Game
             }
         }
     }
+
     private ArrayList<String> checkWord(String input)
     {
-       /* String[] answerAsList = answer.split("");
-        String[] word = input.split("");
-        ArrayList<String> result = new ArrayList<>();
-        for(int i = 0; i < 5; i++)
-        {
-            for(int j = 0; j < 5; j++)
-            {
-                if(word[i].equalsIgnoreCase(answerAsList[j]))
-                {
-                    if(i != j)
-                    {
-                        result.add("?");
-                    }
-                    else
-                    {
-                        result.add(word[i]);
-                    }
-                }
-                else
-                {
-                    result.add("X");
-                }
-            }
-            System.out.println(result.get(i));
-        }
-        return result;*/
-
         ArrayList<String> result = new ArrayList<>();
         for(int i = 0; i < answer.length(); i++)
         {

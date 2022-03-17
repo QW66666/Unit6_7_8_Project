@@ -64,15 +64,15 @@ public class Game
     public void startGame()
     {
         Board board = new Board();
-        //answer = dictionary.get(((int)(Math.random()*(dictionary.size()-1))+1));
-        answer = "bells"; //TESTING
+        answer = dictionary.get(((int)(Math.random()*(dictionary.size()-1))+1));
+        //answer = "bells"; //TESTING
         int row = -1;
         numTries = 6;
         int round = 1;
         while(numTries > 0)
         {
             board.printGrid();
-            System.out.println(answer); //TESTING
+           // System.out.println(answer); //TESTING
             System.out.print("Enter Your Guess: ");
             String userGuess = scanner.nextLine();
             if(userGuess.length() != 5)
@@ -131,7 +131,7 @@ public class Game
         {
             String inputLetter = input.substring(i, i+1).toUpperCase();
             String answerLetter = answer.substring(i, i+1).toUpperCase();
-            if(answerLetter.contains(inputLetter))
+            if(answer.toUpperCase().contains(inputLetter))
             {
                 if(answerLetter.equals(inputLetter))
                 {

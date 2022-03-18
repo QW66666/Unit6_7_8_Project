@@ -69,6 +69,7 @@ public class Game
         int row = -1;
         numTries = 6;
         int round = 1;
+        boolean guessed = false;
         while(numTries > 0)
         {
             board.printGrid();
@@ -99,6 +100,7 @@ public class Game
                     }
                     board.printGrid();
                     System.out.println("YOU GUESSED THE WORD");
+                    guessed = true;
                     calculateScore();
                     System.out.println("Score: " + currScore);
                     if(numTries > 0)
@@ -106,6 +108,7 @@ public class Game
                         round++;
                         System.out.println("\nWORD " + round);
                         board.resetBoard();
+                        guessed = false;
                         row = -1;
                         numTries = 6;
                         answer = dictionary.get(((int)(Math.random()*(dictionary.size()-1))+1));
@@ -115,11 +118,16 @@ public class Game
             }
             if(numTries == 0)
             {
+                board.printGrid();
                 if (currScore > highScore)
                 {
                     highScore = currScore;
                 }
                 currScore = 0;
+                if(!guessed)
+            {
+                System.out.println("ANSWER: " + answer);
+            }
             }
         }
     }
@@ -127,6 +135,8 @@ public class Game
     private ArrayList<String> checkWord(String input)
     {
         ArrayList<String> result = new ArrayList<>();
+        boolean duplicateChecked = false;
+        boolean haveDuplicate = checkDuplicate(answer);
         for(int i = 0; i < answer.length(); i++)
         {
             String inputLetter = input.substring(i, i+1).toUpperCase();
@@ -136,10 +146,21 @@ public class Game
                 if(answerLetter.equals(inputLetter))
                 {
                     result.add("  " + GREEN + inputLetter + "  " + RESET);
+                    if(checkDuplicate(input) && !haveDuplicate)
+                    {
+                        duplicateChecked = true;
+                    }
                 }
                 else
                 {
-                    result.add("  " + YELLOW + inputLetter + "  " + RESET);
+                    if(duplicateChecked && inputLetter.equalsIgnoreCase(findDuplicate(input)))
+                    {
+                        result.add("  " + RED + inputLetter + "  " + RESET);
+                    }
+                    else
+                    {
+                        result.add("  " + YELLOW + inputLetter + "  " + RESET);
+                    }
                 }
             }
             else
@@ -148,6 +169,52 @@ public class Game
             }
         }
         return result;
+    }
+
+    public static String findDuplicate(String word)
+    {
+        String[] temp = word.split("");
+        String[] temp2 = word.split("");
+        int count = 0;
+        for (int i = 0; i < temp.length; i++)
+        {
+            for(int j = 0; j < temp.length; j++)
+            {
+                if(temp[i].equals(temp2[j]))
+                {
+                    count++;
+                    if(count > 1)
+                    {
+                        return temp[i];
+                    }
+                }
+            }
+            count = 0;
+        }
+        return "";
+    }
+
+    public static boolean checkDuplicate(String word)
+    {
+        String[] temp = word.split("");
+        String[] temp2 = word.split("");
+        int count = 0;
+        for (int i = 0; i < temp.length; i++)
+        {
+            for(int j = 0; j < temp.length; j++)
+            {
+                if(temp[i].equals(temp2[j]))
+                {
+                    count++;
+                    if(count > 1)
+                    {
+                        return true;
+                    }
+                }
+            }
+            count = 0;
+        }
+        return false;
     }
 
     private boolean validWord(String input)
@@ -175,7 +242,6 @@ public class Game
         {
             dictionary.add(sc.nextLine());
         }
-
 
     }
 

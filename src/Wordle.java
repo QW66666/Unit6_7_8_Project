@@ -212,7 +212,7 @@ public class Wordle
         else
         {
             System.out.println();
-            System.out.println("GAME HISTORY");
+            System.out.println("****GAME HISTORY****");
             System.out.println("HISTORY NOT AVAILABLE");
             System.out.println("NO GAMES EXISTS");
         }

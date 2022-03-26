@@ -51,8 +51,8 @@ public class Wordle
     public void startGame()
     {
         Board board = new Board();
-        //answer = dictionary.get(((int)(Math.random()*(dictionary.size()-1))+1));
-        answer = "fires"; //TESTING
+        answer = dictionary.get(((int)(Math.random()*(dictionary.size()-1))+1));
+        //answer = "fires"; //TESTING
         numTries = 6;
         gameNumber++;
         int row = -1;
@@ -61,7 +61,7 @@ public class Wordle
         while(numTries > 0)
         {
             board.printGrid();
-            System.out.println(answer); //TESTING
+           // System.out.println(answer); //TESTING
             System.out.print("Enter Your Guess: ");
             String userGuess = scanner.nextLine();
             if(userGuess.length() != 5)
@@ -184,7 +184,7 @@ public class Wordle
             Game mostWordsGame = history.get(0);
             int highScore = history.get(0).getScore();
             int highWords = history.get(0).getWordsGuessed();
-            System.out.println("GAME HISTORY");
+            System.out.println("****GAME HISTORY****");
             for(int i = 0; i < history.size(); i++)
             {
                 Game game = history.get(i);
@@ -200,7 +200,7 @@ public class Wordle
                 }
             }
             System.out.println();
-            System.out.println("BEST GAMES");
+            System.out.println("****BEST GAMES****");
             System.out.println();
             System.out.println("Highest Score Game");
             highScoreGame.printGameHistory();
